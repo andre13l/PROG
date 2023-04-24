@@ -164,7 +164,7 @@ namespace prog
       {
         run_test(id);
       }
-
+      
       cout << "== TEST EXECUTION SUMMARY ==" << endl
            << "Total tests: " << total_tests << endl
            << "Passed tests: " << passed_tests << endl

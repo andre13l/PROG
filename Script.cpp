@@ -48,9 +48,36 @@ namespace prog {
                 save();
                 continue;
             } 
-            // TODO ...
-
+            if (command == "invert"){
+                invert();
+                continue;
+            }
+            if (command == "to_gray_scale") {
+                to_gray_scale();
+                continue;
+            }
+            if (command == "replace") {
+                replace();
+                continue;
+            }
+            if (command == "fill") {
+                fill();
+                continue;
+            }
+            if (command == "h_mirror") {
+                h_mirror();
+                continue;
+            }
+            if (command == "v_mirror") {
+                v_mirror();
+                continue;
+            }
+            if (command == "add") {
+                add();
+                continue;
+            }
         }
+
     }
     void Script::open() {
         // Replace current image (if any) with image read from PNG file.
@@ -73,4 +100,89 @@ namespace prog {
         input >> filename;
         saveToPNG(filename, image);
     }
+    void Script::invert() {
+        for (int y = 0; y < image->height(); y++) {
+        for (int x = 0; x < image->width(); x++) {
+            image->at(x,y).red()= 255 - image->at(x,y).red();
+            image->at(x,y).green()= 255 - image->at(x,y).green();
+            image->at(x,y).blue()= 255 - image->at(x,y).blue();
+        }
+        }
+    }
+    void Script::to_gray_scale() {
+        for (int y = 0; y < image->height(); y++) {
+            for (int x = 0; x < image->width(); x++) {
+            int v = (image->at(x,y).red()+image->at(x,y).green()+image->at(x,y).blue())/3;
+            image->at(x,y).red()= v;
+            image->at(x,y).green()= v;
+            image->at(x,y).blue()= v;
+            }
+        }
+    }
+    void Script::replace() {
+        Color c1, c2;
+        input >> c1 >> c2;
+        for (int y = 0; y < image->height(); y++) {
+            for (int x = 0; x < image->width(); x++) {
+                if((image->at(x,y).red()==c1.red()) && (image->at(x,y).green()==c1.green()) && (image->at(x,y).blue()== c1.blue())){
+                    image->at(x,y).red() = c2.red();
+                    image->at(x,y).green() = c2.green();
+                    image->at(x,y).blue() = c2.blue();
+                }
+            }
+        }
+    }
+    void Script::fill() {
+        int x,y,w,h;
+        Color c1;
+        input >> x >> y >> w >> h >> c1;
+        for (int i = x; i < x+w; i++){
+            for(int j = y; j< y+h; j++){
+                image->at(i,j).red() = c1.red();
+                image->at(i,j).green() = c1.green();
+                image->at(i,j).blue() = c1.blue();
+            }
+        }
+    }
+    void Script::h_mirror() {
+        Color c1,c2;;
+        for(int i =0; i<(image->width())/2;i++){
+            for(int j=0; j<image->height(); j++){
+                c1=image->at(i,j);
+                c2=image->at(image->width()-i-1,j);
+                image->at(i,j)=c2;
+                image->at(image->width()-i-1,j)=c1;
+            }
+        }
+    }
+    void Script::v_mirror() {
+        Color c1,c2;;
+        for(int i =0; i<image->width();i++){
+            for(int j=0; j<(image->height())/2; j++){
+                c1=image->at(i,j);
+                c2=image->at(i,image->height()-1-j);
+                image->at(i,j)=c2;
+                image->at(i,image->height()-1-j)=c1;
+            }
+        }
+    }
+
+    void Script::add() {
+        string filename;
+        Color c;
+        int x,y;
+        input >> filename >> c >> x >> y;
+        Image *img = loadFromPNG(filename);
+        for(int i = x; i < image->width();i++){
+            for (int j = y; j < image->height(); j++)
+            {
+                if((img->at(i,j).red()!=c.red()) && (img->at(i,j).green()!=c.green()) && (img->at(i,j).blue()!=c.blue())){
+                    image->at(i,j)=img->at(i,j);
+                }
+            }
+            
+        }
+    }
+
 }
+ 

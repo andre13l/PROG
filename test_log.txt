@@ -1,17 +1,315 @@
->>>> [1] basic_blank1 <<<<
+>>>> [1] add1 <<<<
 Executing command 'blank' ...
-Executing command 'save' ...
->>>> [2] basic_blank2 <<<<
+Executing command 'add' ...
+=================================================================
+==3253==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x7f0534c97148 at pc 0x55a645137f79 bp 0x7ffc163a11f0 sp 0x7ffc163a11e0
+READ of size 1 at 0x7f0534c97148 thread T0
+    #0 0x55a645137f78 in prog::Script::add() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:179
+    #1 0x55a645132a6b in prog::Script::run() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:76
+    #2 0x55a64512329b in prog::TestDriver::test_script(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:43
+    #3 0x55a64512409d in prog::TestDriver::run_test(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:79
+    #4 0x55a645125f13 in prog::TestDriver::test_scripts(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:165
+    #5 0x55a645122360 in main /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:186
+    #6 0x7f0537d64d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)
+    #7 0x7f0537d64e3f in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x29e3f)
+    #8 0x55a645121ef4 in _start (/mnt/c/Users/2ibi/aulas/prog/PROG/test+0x7aef4)
+
+0x7f0534c97148 is located 0 bytes to the right of 285000-byte region [0x7f0534c51800,0x7f0534c97148)
+allocated by thread T0 here:
+    #0 0x7f0538981337 in operator new[](unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:102
+    #1 0x55a645131047 in prog::Image::Image(int, int, prog::Color const&) /mnt/c/Users/2ibi/aulas/prog/PROG/Image.cpp:8
+    #2 0x55a64517b280 in prog::loadFromPNG(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/PNG.cpp:20
+    #3 0x55a645137e42 in prog::Script::add() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:175
+    #4 0x55a645132a6b in prog::Script::run() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:76
+    #5 0x55a64512329b in prog::TestDriver::test_script(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:43
+    #6 0x55a64512409d in prog::TestDriver::run_test(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:79
+    #7 0x55a645125f13 in prog::TestDriver::test_scripts(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:165
+    #8 0x55a645122360 in main /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:186
+    #9 0x7f0537d64d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:179 in prog::Script::add()
+Shadow bytes around the buggy address:
+  0x0fe12698add0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe12698ade0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe12698adf0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe12698ae00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe12698ae10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0fe12698ae20: 00 00 00 00 00 00 00 00 00[fa]fa fa fa fa fa fa
+  0x0fe12698ae30: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe12698ae40: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe12698ae50: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe12698ae60: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe12698ae70: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==3253==ABORTING
+>>>> [2] add2 <<<<
 Executing command 'blank' ...
-Executing command 'save' ...
->>>> [3] basic_blank3 <<<<
+Executing command 'add' ...
+=================================================================
+==3254==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x7f0534f58148 at pc 0x55a645137f79 bp 0x7ffc163a11f0 sp 0x7ffc163a11e0
+READ of size 1 at 0x7f0534f58148 thread T0
+    #0 0x55a645137f78 in prog::Script::add() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:179
+    #1 0x55a645132a6b in prog::Script::run() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:76
+    #2 0x55a64512329b in prog::TestDriver::test_script(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:43
+    #3 0x55a64512409d in prog::TestDriver::run_test(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:79
+    #4 0x55a645125f13 in prog::TestDriver::test_scripts(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:165
+    #5 0x55a645122360 in main /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:186
+    #6 0x7f0537d64d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)
+    #7 0x7f0537d64e3f in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x29e3f)
+    #8 0x55a645121ef4 in _start (/mnt/c/Users/2ibi/aulas/prog/PROG/test+0x7aef4)
+
+0x7f0534f58148 is located 0 bytes to the right of 285000-byte region [0x7f0534f12800,0x7f0534f58148)
+allocated by thread T0 here:
+    #0 0x7f0538981337 in operator new[](unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:102
+    #1 0x55a645131047 in prog::Image::Image(int, int, prog::Color const&) /mnt/c/Users/2ibi/aulas/prog/PROG/Image.cpp:8
+    #2 0x55a64517b280 in prog::loadFromPNG(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/PNG.cpp:20
+    #3 0x55a645137e42 in prog::Script::add() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:175
+    #4 0x55a645132a6b in prog::Script::run() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:76
+    #5 0x55a64512329b in prog::TestDriver::test_script(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:43
+    #6 0x55a64512409d in prog::TestDriver::run_test(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:79
+    #7 0x55a645125f13 in prog::TestDriver::test_scripts(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:165
+    #8 0x55a645122360 in main /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:186
+    #9 0x7f0537d64d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:179 in prog::Script::add()
+Shadow bytes around the buggy address:
+  0x0fe1269e2fd0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe1269e2fe0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe1269e2ff0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe1269e3000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe1269e3010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0fe1269e3020: 00 00 00 00 00 00 00 00 00[fa]fa fa fa fa fa fa
+  0x0fe1269e3030: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe1269e3040: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe1269e3050: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe1269e3060: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe1269e3070: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==3254==ABORTING
+>>>> [3] add3 <<<<
 Executing command 'blank' ...
-Executing command 'blank' ...
-Executing command 'save' ...
->>>> [4] basic_open1 <<<<
+Executing command 'add' ...
+=================================================================
+==3255==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x7f0534afeb00 at pc 0x55a645137f79 bp 0x7ffc163a11f0 sp 0x7ffc163a11e0
+READ of size 1 at 0x7f0534afeb00 thread T0
+    #0 0x55a645137f78 in prog::Script::add() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:179
+    #1 0x55a645132a6b in prog::Script::run() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:76
+    #2 0x55a64512329b in prog::TestDriver::test_script(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:43
+    #3 0x55a64512409d in prog::TestDriver::run_test(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:79
+    #4 0x55a645125f13 in prog::TestDriver::test_scripts(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:165
+    #5 0x55a645122360 in main /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:186
+    #6 0x7f0537d64d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)
+    #7 0x7f0537d64e3f in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x29e3f)
+    #8 0x55a645121ef4 in _start (/mnt/c/Users/2ibi/aulas/prog/PROG/test+0x7aef4)
+
+0x7f0534afeb00 is located 0 bytes to the right of 480000-byte region [0x7f0534a89800,0x7f0534afeb00)
+allocated by thread T0 here:
+    #0 0x7f0538981337 in operator new[](unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:102
+    #1 0x55a645131047 in prog::Image::Image(int, int, prog::Color const&) /mnt/c/Users/2ibi/aulas/prog/PROG/Image.cpp:8
+    #2 0x55a64517b280 in prog::loadFromPNG(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/PNG.cpp:20
+    #3 0x55a645137e42 in prog::Script::add() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:175
+    #4 0x55a645132a6b in prog::Script::run() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:76
+    #5 0x55a64512329b in prog::TestDriver::test_script(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:43
+    #6 0x55a64512409d in prog::TestDriver::run_test(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:79
+    #7 0x55a645125f13 in prog::TestDriver::test_scripts(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:165
+    #8 0x55a645122360 in main /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:186
+    #9 0x7f0537d64d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:179 in prog::Script::add()
+Shadow bytes around the buggy address:
+  0x0fe126957d10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe126957d20: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe126957d30: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe126957d40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe126957d50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0fe126957d60:[fa]fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe126957d70: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe126957d80: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe126957d90: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe126957da0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe126957db0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==3255==ABORTING
+>>>> [4] add4 <<<<
 Executing command 'open' ...
-Executing command 'save' ...
->>>> [5] basic_open2 <<<<
-Executing command 'open' ...
-Executing command 'open' ...
-Executing command 'save' ...
+Executing command 'add' ...
+=================================================================
+==3256==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x7f0534aff14b at pc 0x55a645137f79 bp 0x7ffc163a11f0 sp 0x7ffc163a11e0
+READ of size 1 at 0x7f0534aff14b thread T0
+    #0 0x55a645137f78 in prog::Script::add() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:179
+    #1 0x55a645132a6b in prog::Script::run() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:76
+    #2 0x55a64512329b in prog::TestDriver::test_script(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:43
+    #3 0x55a64512409d in prog::TestDriver::run_test(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:79
+    #4 0x55a645125f13 in prog::TestDriver::test_scripts(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:165
+    #5 0x55a645122360 in main /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:186
+    #6 0x7f0537d64d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)
+    #7 0x7f0537d64e3f in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x29e3f)
+    #8 0x55a645121ef4 in _start (/mnt/c/Users/2ibi/aulas/prog/PROG/test+0x7aef4)
+
+0x7f0534aff14b is located 3 bytes to the right of 285000-byte region [0x7f0534ab9800,0x7f0534aff148)
+allocated by thread T0 here:
+    #0 0x7f0538981337 in operator new[](unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:102
+    #1 0x55a645131047 in prog::Image::Image(int, int, prog::Color const&) /mnt/c/Users/2ibi/aulas/prog/PROG/Image.cpp:8
+    #2 0x55a64517b280 in prog::loadFromPNG(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/PNG.cpp:20
+    #3 0x55a645137e42 in prog::Script::add() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:175
+    #4 0x55a645132a6b in prog::Script::run() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:76
+    #5 0x55a64512329b in prog::TestDriver::test_script(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:43
+    #6 0x55a64512409d in prog::TestDriver::run_test(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:79
+    #7 0x55a645125f13 in prog::TestDriver::test_scripts(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:165
+    #8 0x55a645122360 in main /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:186
+    #9 0x7f0537d64d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:179 in prog::Script::add()
+Shadow bytes around the buggy address:
+  0x0fe126957dd0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe126957de0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe126957df0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe126957e00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe126957e10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0fe126957e20: 00 00 00 00 00 00 00 00 00[fa]fa fa fa fa fa fa
+  0x0fe126957e30: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe126957e40: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe126957e50: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe126957e60: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe126957e70: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==3256==ABORTING
+>>>> [5] add5 <<<<
+Executing command 'blank' ...
+Executing command 'add' ...
+=================================================================
+==3257==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x7f0534f60f4e at pc 0x55a645137f79 bp 0x7ffc163a11f0 sp 0x7ffc163a11e0
+READ of size 1 at 0x7f0534f60f4e thread T0
+    #0 0x55a645137f78 in prog::Script::add() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:179
+    #1 0x55a645132a6b in prog::Script::run() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:76
+    #2 0x55a64512329b in prog::TestDriver::test_script(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:43
+    #3 0x55a64512409d in prog::TestDriver::run_test(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:79
+    #4 0x55a645125f13 in prog::TestDriver::test_scripts(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:165
+    #5 0x55a645122360 in main /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:186
+    #6 0x7f0537d64d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)
+    #7 0x7f0537d64e3f in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x29e3f)
+    #8 0x55a645121ef4 in _start (/mnt/c/Users/2ibi/aulas/prog/PROG/test+0x7aef4)
+
+0x7f0534f60f4e is located 0 bytes to the right of 268110-byte region [0x7f0534f1f800,0x7f0534f60f4e)
+allocated by thread T0 here:
+    #0 0x7f0538981337 in operator new[](unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:102
+    #1 0x55a645131047 in prog::Image::Image(int, int, prog::Color const&) /mnt/c/Users/2ibi/aulas/prog/PROG/Image.cpp:8
+    #2 0x55a64517b280 in prog::loadFromPNG(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/PNG.cpp:20
+    #3 0x55a645137e42 in prog::Script::add() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:175
+    #4 0x55a645132a6b in prog::Script::run() /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:76
+    #5 0x55a64512329b in prog::TestDriver::test_script(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:43
+    #6 0x55a64512409d in prog::TestDriver::run_test(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:79
+    #7 0x55a645125f13 in prog::TestDriver::test_scripts(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:165
+    #8 0x55a645122360 in main /mnt/c/Users/2ibi/aulas/prog/PROG/test.cpp:186
+    #9 0x7f0537d64d8f  (/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow /mnt/c/Users/2ibi/aulas/prog/PROG/Script.cpp:179 in prog::Script::add()
+Shadow bytes around the buggy address:
+  0x0fe1269e4190: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe1269e41a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe1269e41b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe1269e41c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe1269e41d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0fe1269e41e0: 00 00 00 00 00 00 00 00 00[06]fa fa fa fa fa fa
+  0x0fe1269e41f0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe1269e4200: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe1269e4210: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe1269e4220: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0fe1269e4230: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==3257==ABORTING
