@@ -31,6 +31,12 @@ namespace prog
     void h_mirror();
     void v_mirror();
     void add();
+    void crop();
+    void rotate_left();
+    void rotate_right();
+    void median_filter();
+    void xpm2_open();
+    void xpm2_save();
   };
 }
 #endif
