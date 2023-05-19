@@ -91,15 +91,8 @@ namespace prog {
                 continue;
             }
             if (command == "median_filter") {
+                //this command isn't passing the tests
                 median_filter();
-                continue;
-            }
-            if (command == "xpm2_open") {
-                xpm2_open();
-                continue;
-            }
-            if (command == "xpm2_save") {
-                xpm2_save();
                 continue;
             }
         }
@@ -127,15 +120,17 @@ namespace prog {
         saveToPNG(filename, image);
     }
     void Script::invert() {
+        // Each individual pixel (r,g,b) becomes (255-r,255-g,255-b) 
         for (int y = 0; y < image->height(); y++) {
-        for (int x = 0; x < image->width(); x++) {
-            image->at(x,y).red()= 255 - image->at(x,y).red();
-            image->at(x,y).green()= 255 - image->at(x,y).green();
-            image->at(x,y).blue()= 255 - image->at(x,y).blue();
-        }
+            for (int x = 0; x < image->width(); x++) {
+                image->at(x,y).red()= 255 - image->at(x,y).red();
+                image->at(x,y).green()= 255 - image->at(x,y).green();
+                image->at(x,y).blue()= 255 - image->at(x,y).blue();
+            }
         }
     }
     void Script::to_gray_scale() {
+        // Each individual pixel (r,g,b) becomes (v,v,v) where v = (r + g + b)/3
         for (int y = 0; y < image->height(); y++) {
             for (int x = 0; x < image->width(); x++) {
             int v = (image->at(x,y).red()+image->at(x,y).green()+image->at(x,y).blue())/3;
@@ -146,6 +141,7 @@ namespace prog {
         }
     }
     void Script::replace() {
+        // all (r1,  g1, b1) pixels become (r2,  g2, b2)
         Color c1, c2;
         input >> c1 >> c2;
         for (int y = 0; y < image->height(); y++) {
@@ -159,6 +155,8 @@ namespace prog {
         }
     }
     void Script::fill() {
+        // all pixels in the rectangle with top-left corner (x,y), width w, and height h
+        // have their RGB values changed to (r,g,b)
         int x,y,w,h;
         Color c1;
         input >> x >> y >> w >> h >> c1;
@@ -171,6 +169,7 @@ namespace prog {
         }
     }
     void Script::h_mirror() {
+        // mirror the image horizontally
         Color c1,c2;;
         for(int i =0; i<(image->width())/2;i++){
             for(int j=0; j<image->height(); j++){
@@ -182,6 +181,7 @@ namespace prog {
         }
     }
     void Script::v_mirror() {
+        // mirror the image vertically
         Color c1,c2;;
         for(int i =0; i<image->width();i++){
             for(int j=0; j<(image->height())/2; j++){
@@ -193,34 +193,38 @@ namespace prog {
         }
     }
 
-void Script::add() {
-    string filename;
-    Color c;
-    int x, y;
-    input >> filename >> c >> x >> y;
-    Image* img = loadFromPNG(filename);
-    int imgWidth = img->width();
-    int imgHeight = img->height();
+    void Script::add() {
+        // copy all pixels from image stored in PNG file filename
+        // to the rectangle with top-left corner (x,y) of the current image
+        // except pixels with "neutral" color (r,g,b)
+        string filename;
+        Color c;
+        int x, y;
+        input >> filename >> c >> x >> y;
+        Image* img = loadFromPNG(filename);
+        int imgWidth = img->width();
+        int imgHeight = img->height();
 
-    for (int i = 0; i < imgWidth; i++) {
-        for (int j = 0; j < imgHeight; j++) {
-            Color pixel = img->at(i, j);
-            if (!(pixel.red() == c.red() && pixel.green() == c.green() && pixel.blue() == c.blue())) {
-                int destX = x + i;
-                int destY = y + j;
-                if (destX >= 0 && destX < image->width() && destY >= 0 && destY < image->height()) {
-                    image->at(destX, destY) = pixel;
+        for (int i = 0; i < imgWidth; i++) {
+            for (int j = 0; j < imgHeight; j++) {
+                Color pixel = img->at(i, j);
+                if (!(pixel.red() == c.red() && pixel.green() == c.green() && pixel.blue() == c.blue())) {
+                    int destX = x + i;
+                    int destY = y + j;
+                    if (destX >= 0 && destX < image->width() && destY >= 0 && destY < image->height()) {
+                        image->at(destX, destY) = pixel;
+                    }
                 }
             }
         }
+        delete img;  // Delete the loaded image after adding its pixels to the current image
     }
-    delete img;  // Delete the loaded image after adding its pixels to the current image
-}
 
 
 
 
     void Script::crop() {
+        // Reduce the image to the the pixels in the rectangle defined by top-left corner (x,y), width w, and height h
         int x,y,w,h;
         input >> x >> y >> w >> h;
         Image* croppedImage = new Image(w, h);
@@ -237,59 +241,60 @@ void Script::add() {
     }
 
     void Script::rotate_left() {
-    Image* rotatedImage = new Image(image->height(), image->width(), Color());
+        // Rotate image left by 90 degrees
+        Image* rotatedImage = new Image(image->height(), image->width(), Color());
 
-    for (int y = 0; y < image->height(); y++) {
-        for (int x = 0; x < image->width(); x++) {
-            int rotatedX = y;
-            int rotatedY = image->width() - x - 1;
-            rotatedImage->at(rotatedX, rotatedY) = image->at(x, y);
+        for (int y = 0; y < image->height(); y++) {
+            for (int x = 0; x < image->width(); x++) {
+                int rotatedX = y;
+                int rotatedY = image->width() - x - 1;
+                rotatedImage->at(rotatedX, rotatedY) = image->at(x, y);
+            }
         }
-    }
 
-    delete image;
-    image = rotatedImage;
+        delete image;
+        image = rotatedImage;
 }
 
 
     void Script::rotate_right() {
-    Image* rotatedImage = new Image(image->height(), image->width(), Color());
+        // Rotate image right by 90 degrees
+        Image* rotatedImage = new Image(image->height(), image->width(), Color());
 
-    for (int y = 0; y < image->height(); y++) {
-        for (int x = 0; x < image->width(); x++) {
-            int rotatedX = image->height() - y - 1;
-            int rotatedY = x;
-            rotatedImage->at(rotatedX, rotatedY) = image->at(x, y);
+        for (int y = 0; y < image->height(); y++) {
+            for (int x = 0; x < image->width(); x++) {
+                int rotatedX = image->height() - y - 1;
+                int rotatedY = x;
+                rotatedImage->at(rotatedX, rotatedY) = image->at(x, y);
+            }
         }
-    }
 
-    delete image;
-    image = rotatedImage;
+        delete image;
+        image = rotatedImage;
 }
     void Script::median_filter() {
-        int ws;
-        input >> ws;
+        int windowSize;
+        input >> windowSize;
         // Create a temporary image to store the filtered result
         Image* filteredImage = new Image(image->width(), image->height());
 
-        int halfws = ws / 2;
+        int halfWindowSize = windowSize / 2;
 
         // Iterate over each pixel in the image
         for (int y = 0; y < image->height(); y++) {
             for (int x = 0; x < image->width(); x++) {
-                vector<int> redValues;
-                vector<int> greenValues;
-                vector<int> blueValues;
+                std::vector<int> redValues;
+                std::vector<int> greenValues;
+                std::vector<int> blueValues;
 
                 // Iterate over the pixels within the window centered at (x, y)
-                for (int j = -halfws; j <= halfws; j++) {
-                    for (int i = -halfws; i <= halfws; i++) {
-                        int neighborX = x + i;
-                        int neighborY = y + j;
+                for (int j = -halfWindowSize; j <= halfWindowSize; j++) {
+                    for (int i = -halfWindowSize; i <= halfWindowSize; i++) {
+                        int neighborX = std::max(0, std::min(image->width() - 1, x + i));
+                        int neighborY = std::max(0, std::min(image->height() - 1, y + j));
 
-                        // Check if the neighbor pixel is within the image bounds
-                        if (neighborX >= 0 && neighborX < image->width() && neighborY >= 0 && neighborY < image->height()) {
-                            Color& neighborColor = image->at(neighborX, neighborY);
+                        Color& neighborColor = image->at(neighborX, neighborY);
+                        if((y+j)>=0 && (x+i)>=0 && (y+j)<image->height() && (x+i)<image->width()){
                             redValues.push_back(neighborColor.red());
                             greenValues.push_back(neighborColor.green());
                             blueValues.push_back(neighborColor.blue());
@@ -298,9 +303,9 @@ void Script::add() {
                 }
 
                 // Sort the color values to find the median
-                sort(redValues.begin(), redValues.end());
-                sort(greenValues.begin(), greenValues.end());
-                sort(blueValues.begin(), blueValues.end());
+                std::sort(redValues.begin(), redValues.end());
+                std::sort(greenValues.begin(), greenValues.end());
+                std::sort(blueValues.begin(), blueValues.end());
 
                 // Get the median color value
                 int medianRed = redValues[redValues.size() / 2];
@@ -308,26 +313,25 @@ void Script::add() {
                 int medianBlue = blueValues[blueValues.size() / 2];
 
                 // Set the filtered color in the temporary image
-                Color& filteredColor = filteredImage->at(x, y);
-                filteredColor.red() = medianRed;
-                filteredColor.green() = medianGreen;
-                filteredColor.blue() = medianBlue;
+                filteredImage->at(x,y).red() = medianRed;
+                filteredImage->at(x,y).green() = medianGreen;
+                filteredImage->at(x,y).blue() = medianBlue;
+            }
         }
-    }
 
         // Replace the original image with the filtered image
         delete image;
         image = filteredImage;
     }
-    void Script::xpm2_open() {
-        string filename;
+    void Script::xpm2_open(const std::string& filename) {
+        // Replace the current image (if any) with the image read from the XPM2 file
         clear_image_if_any();
-        image = loadFromXPM2(filename); 
-    }
-    void Script::xpm2_save() {
-        string filename;
+        image = loadFromXPM2(filename);
+}
+
+    void Script::xpm2_save(const std::string& filename) {
         // Save the current image to the XPM2 file
-        saveToXPM2(filename, image);    
-    }
+        saveToXPM2(filename, image);
+}
 }
  
